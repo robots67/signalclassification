@@ -143,60 +143,6 @@ def genPartial():
             sigwriter.writerow(saw_noise)
     print("Generated partialsets!")
 
-def genCorrSets():
-    #Generate correlation training and testing sets
-    #Adds noise of random amplitude
-    def corr(sig):
-        #correlate the signal
-        corr_ones = signal.correlate(sig, np.ones(64), mode='same')/64
-        return corr_ones
-
-    with open('correlationtrain.csv', 'w', newline='') as csvfile:
-        sigwriter = csv.writer(csvfile, delimiter=',',
-                                quotechar=',', quoting=csv.QUOTE_MINIMAL)
-        sigwriter.writerow(labels)
-        for row in range(500):
-            sin_noise = (sig_sin + np.random.randn(len(sig_sin))
-                *np.random.randint(1,10))
-            corr_sig = corr(sin_noise)
-            corr_sig = np.insert(corr_sig, 0, 0., axis=0)
-            sigwriter.writerow(corr_sig)
-        for row in range(500):
-            square_noise = (sig_square + np.random.randn(len(sig_square))
-                *np.random.randint(1,10))
-            corr_sig = corr(square_noise)
-            corr_sig = np.insert(corr_sig, 0, 1., axis=0)
-            sigwriter.writerow(corr_sig)
-        for row in range(500):
-            saw_noise = (sig_sawtooth + np.random.randn(len(sig_sawtooth))
-                *np.random.randint(1,10))
-            corr_sig = corr(saw_noise)
-            corr_sig = np.insert(corr_sig, 0, 2., axis=0)
-            sigwriter.writerow(corr_sig)
-    with open('correlationtest.csv', 'w', newline='') as csvfile:
-        sigwriter = csv.writer(csvfile, delimiter=',',
-                                quotechar=',', quoting=csv.QUOTE_MINIMAL)
-        sigwriter.writerow(labels)
-        for row in range(500):
-            sin_noise = (sig_sin + np.random.randn(len(sig_sin))
-                *np.random.randint(1,10))
-            corr_sig = corr(sin_noise)
-            corr_sig = np.insert(corr_sig, 0, 0., axis=0)
-            sigwriter.writerow(corr_sig)
-        for row in range(500):
-            square_noise = (sig_square + np.random.randn(len(sig_square))
-                *np.random.randint(1,10))
-            corr_sig = corr(square_noise)
-            corr_sig = np.insert(corr_sig, 0, 1., axis=0)
-            sigwriter.writerow(corr_sig)
-        for row in range(500):
-            saw_noise = (sig_sawtooth + np.random.randn(len(sig_sawtooth))
-                *np.random.randint(1,10))
-            corr_sig = corr(saw_noise)
-            corr_sig = np.insert(corr_sig, 0, 2., axis=0)
-            sigwriter.writerow(corr_sig)
-    print("Generated corrsets!")
-
 def genFilteredSet():
     #Generates a set that is filtered through a LOWESS function to smooth noise
     #More effective than cross correlation but also significantly slower
